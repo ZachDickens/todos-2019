@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 class AddTodo extends Component {
   onAdd = () => {
+    this.props.addNew(this.props.text);
     this.props.setText("");
   };
   onTextChange = event => {

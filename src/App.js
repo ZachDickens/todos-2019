@@ -15,10 +15,19 @@ class App extends Component {
   setText = text => {
     this.setState({ currentItemText: text });
   };
+  addNew = text => {
+    const newTodos = [...this.state.todos, text];
+    this.setState({ todos: newTodos });
+  };
   render() {
     return (
       <div>
-        <AddTodo text={this.state.currentItemText} setText={this.setText} />
+        <AddTodo
+          text={this.state.currentItemText}
+          setText={this.setText}
+          addNew={this.addNew}
+        />
+
         <TodoList todos={this.state.todos} />
 
         <button onClick={this.resetAll}>Reset All</button>
