@@ -1,13 +1,19 @@
 import React, { Component } from "react";
 import AddTodo from "./AddTodo";
 import TodoList from "./TodoList";
+
 class App extends Component {
   constructor() {
     super();
     this.state = {
       currentItemText: "Foo",
-      todos: ["Add a todo", "Remove todo"]
+      todos: ["Loading"]
     };
+  }
+  componentDidMount() {
+    fetch("https://localhost:44339/api/todos")
+      .then(res => res.json())
+      .then(json => this.setState({ todos: json }));
   }
   resetAll = () => {
     this.setState({ currentItemText: "", todos: [] });
@@ -16,8 +22,22 @@ class App extends Component {
     this.setState({ currentItemText: text });
   };
   addNew = text => {
-    const newTodos = [...this.state.todos, text];
-    this.setState({ todos: newTodos });
+    fetch("https://localhost:44339/api/todos", {
+      method: "POST",
+      body: JSON.stringify(text),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => {
+        if (res.ok) {
+          const newTodos = [...this.state.todos, text];
+          this.setState({ todos: newTodos });
+        }
+      })
+      .catch(err => {
+        console.error(err);
+      });
   };
   render() {
     return (
